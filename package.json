@@ -1,0 +1,44 @@
+{
+  "name": "code-agent-pro",
+  "version": "1.0.0",
+  "description": "Professional Code Agent skill — SPEC workflow, project onboarding, quality assurance, and continuous learning. Works with Claude Code, Codex, OpenClaw, OpenCode, Trae, and more.",
+  "keywords": [
+    "code-agent",
+    "claude-code",
+    "codex",
+    "opencode",
+    "ai-coding",
+    "spec-workflow",
+    "code-quality",
+    "skill",
+    "agent-skill"
+  ],
+  "author": "Eve0211",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Eve0211/code-agent-pro.git"
+  },
+  "homepage": "https://github.com/Eve0211/code-agent-pro#readme",
+  "bugs": {
+    "url": "https://github.com/Eve0211/code-agent-pro/issues"
+  },
+  "bin": {
+    "code-agent-pro": "scripts/install.js"
+  },
+  "files": [
+    "SKILL.md",
+    "skill.json",
+    "scripts/install.js",
+    "references/",
+    "scripts/setup.sh",
+    "scripts/setup.ps1"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js"
+  },
+  "type": "module"
+}

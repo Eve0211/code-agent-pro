@@ -6,7 +6,7 @@
 
 # Code Agent Pro
 
-> Opinionated, production-grade Code Agent skill for [OpenClaw](https://openclaw.ai). Treats specification discipline, code quality, and continuous learning as first-class concerns.
+> Professional Code Agent skill for AI coding assistants. Treats specification discipline, code quality, and continuous learning as first-class concerns. Works with Claude Code, Codex, OpenClaw, Cursor, OpenCode, Trae, and more.
 
 Inspired by the [Claude Code `/feature-dev` plugin](https://github.com/anthropics/claude-code/tree/main/plugins/feature-dev) philosophy: **never code without a spec**.
 
@@ -106,26 +106,44 @@ code-agent-pro/
 
 ## Installation
 
-### As an OpenClaw Skill
+### Option A: npx (Recommended)
 
-1. Clone this repo into your skills directory:
 ```bash
-# macOS / Linux
-git clone https://github.com/Eve0211/code-agent-pro.git ~/.qclaw/workspace/skills/code-agent-pro
+# Install to all detected agents automatically
+npx code-agent-pro
 
-# Windows
-git clone https://github.com/Eve0211/code-agent-pro.git %USERPROFILE%\.qclaw\workspace\skills\code-agent-pro
+# Install to a specific agent only
+npx code-agent-pro --claude
+npx code-agent-pro --codex
+npx code-agent-pro --openclaw
+npx code-agent-pro --cursor
+npx code-agent-pro --opencode
+
+# Reinstall (overwrite existing)
+npx code-agent-pro --force
+
+# List detected agents and install status
+npx code-agent-pro --list
 ```
 
-2. Run the dependency check:
+Supported agents: **Claude Code**, **Codex**, **OpenClaw / QClaw**, **Cursor**, **OpenCode**.
+
+### Option B: Git Clone
+
 ```bash
-bash skills/code-agent-pro/scripts/setup.sh        # macOS / Linux
-.\skills\code-agent-pro\scripts\setup.ps1           # Windows
+git clone https://github.com/Eve0211/code-agent-pro.git
+
+# Copy to your agent's skills directory, e.g.:
+cp -r code-agent-pro ~/.claude/skills/
+cp -r code-agent-pro ~/.codex/skills/
+cp -r code-agent-pro ~/.qclaw/workspace/skills/
+cp -r code-agent-pro ~/.cursor/skills/
+cp -r code-agent-pro ~/.config/opencode/skills/
 ```
 
-### Optional: Install Integration Skills
+### Optional: Integration Skills
 
-The skill works fully without any external dependencies. Install these for enhanced capabilities:
+Works fully standalone. Install these for enhanced capabilities:
 
 ```bash
 skillhub install write-a-prd         # SPEC generation
@@ -175,7 +193,7 @@ MIT
 
 # Code Agent Pro
 
-> 面向 [OpenClaw](https://openclaw.ai) 的专业级 Code Agent 技能。将规格先行、代码质量、持续学习作为核心原则。
+> 面向 AI 编程助手的专业级 Code Agent 技能。将规格先行、代码质量、持续学习作为核心原则。支持 Claude Code、Codex、OpenClaw、Cursor、OpenCode、Trae 等主流 Agent。
 
 灵感来源于 [Claude Code `/feature-dev` 插件](https://github.com/anthropics/claude-code/tree/main/plugins/feature-dev) 的设计哲学：**永远不要在没有规格的情况下写代码**。
 
@@ -275,24 +293,42 @@ code-agent-pro/
 
 ## 安装
 
-### 作为 OpenClaw 技能安装
+### 方式一：npx（推荐）
 
-1. 将此仓库克隆到技能目录：
 ```bash
-# macOS / Linux
-git clone https://github.com/Eve0211/code-agent-pro.git ~/.qclaw/workspace/skills/code-agent-pro
+# 自动安装到所有检测到的 Agent
+npx code-agent-pro
 
-# Windows
-git clone https://github.com/Eve0211/code-agent-pro.git %USERPROFILE%\.qclaw\workspace\skills\code-agent-pro
+# 仅安装到指定 Agent
+npx code-agent-pro --claude
+npx code-agent-pro --codex
+npx code-agent-pro --openclaw
+npx code-agent-pro --cursor
+npx code-agent-pro --opencode
+
+# 强制覆盖已有安装
+npx code-agent-pro --force
+
+# 查看支持的 Agent 及安装状态
+npx code-agent-pro --list
 ```
 
-2. 运行依赖检测：
+支持：**Claude Code**、**Codex**、**OpenClaw / QClaw**、**Cursor**、**OpenCode**。
+
+### 方式二：Git Clone
+
 ```bash
-bash skills/code-agent-pro/scripts/setup.sh        # macOS / Linux
-.\skills\code-agent-pro\scripts\setup.ps1           # Windows
+git clone https://github.com/Eve0211/code-agent-pro.git
+
+# 复制到对应 Agent 的技能目录，例如：
+cp -r code-agent-pro ~/.claude/skills/
+cp -r code-agent-pro ~/.codex/skills/
+cp -r code-agent-pro ~/.qclaw/workspace/skills/
+cp -r code-agent-pro ~/.cursor/skills/
+cp -r code-agent-pro ~/.config/opencode/skills/
 ```
 
-### 可选：安装集成技能
+### 可选：集成技能
 
 本技能无需任何外部依赖即可完整运行。安装以下技能可获得增强能力：
 

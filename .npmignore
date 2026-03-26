@@ -1,0 +1,9 @@
+# Git files
+.git/
+.gitattributes
+
+# Documentation kept in repo only
+README_CN.md
+
+# Node modules (not needed in package)
+node_modules/
