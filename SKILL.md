@@ -16,13 +16,17 @@ SPEC First —凝固需求
     ↓
 Memory Check —加载上下文
     ↓
-Multi-Agent Reasoning —架构设计
+Architecture Design —架构设计（3 paths）
     ↓
 User Confirmation —用户确认
     ↓
-Generate + QA —生成与质量门禁
+Task Decomposition —任务分解（atomic + verification）
     ↓
-Verify + Learn —验证与学习闭环
+Execute & Verify —逐任务执行与验证
+    ↓
+Quality Gates —质量门禁
+    ↓
+Self-Reflection —验证与学习闭环
 ```
 
 ## Architecture Overview
@@ -88,10 +92,14 @@ Invoke the `write-a-prd` skill to produce a formal specification:
 Use the write-a-prd skill to generate a PRD for this task.
 Populate all sections: problem statement, goals/non-goals, user stories,
 functional requirements with priority levels (P0/P1/P2),
-non-functional requirements, and acceptance criteria.
+UI/UX Design Direction, and acceptance criteria.
 ```
 
-The PRD becomes the **source of truth** for this task. All subsequent code must trace back to specific PRD sections.
+**⚠️ UI/UX Design Direction is MANDATORY** for any task with a user interface.
+If user mentions visual style (e.g., "玻璃拟态", "glassmorphism", "扁平化"), 
+it MUST be recorded in this section. See [spec-workflow.md](references/spec-workflow.md) for the required template.
+
+The PRD becomes the **source of truth** for this task. All subsequent code must trace back to specific PRD sections, including UI/UX requirements.
 
 ### Phase 3: Architecture Design
 
@@ -108,6 +116,37 @@ For each path, specify:
 - Trade-offs
 
 **Present all paths to the user. Make a clear recommendation.** Wait for explicit approval before proceeding.
+
+### Phase 3.5: Task Decomposition (MANDATORY)
+
+After user confirms architecture, decompose implementation into **granular, verifiable tasks**:
+
+```markdown
+## Task Breakdown
+
+| Task | Description | Time | Verification |
+|------|-------------|------|--------------|
+| T1 | [What to do] | 5m | [How to verify completion] |
+| T2 | [What to do] | 10m | [How to verify completion] |
+| ... | ... | ... | ... |
+
+**Total Estimated Time:** [sum]
+```
+
+**Rules**:
+- Each task must be **atomic** (one clear deliverable)
+- Each task must have a **verification method** (test, build, visual check, etc.)
+- No task should exceed **30 minutes** — if larger, split it
+- Tasks must be **ordered by dependency**
+
+**Execution Protocol**:
+1. Announce: "Starting T1: [description]"
+2. Execute: Implement the task
+3. Verify: Run verification method
+4. Report: ✅ "T1 complete" or ❌ "T1 blocked: [issue]"
+5. **Only proceed to next task after verification passes**
+
+See [spec-workflow.md](references/spec-workflow.md) for detailed templates and examples.
 
 ### Phase 4: Implementation
 
