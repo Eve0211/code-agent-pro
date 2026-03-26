@@ -18,6 +18,8 @@ Memory Check —加载上下文
     ↓
 Architecture Design —架构设计（3 paths）
     ↓
+[Plan Mode] —可选：只读规划（探索代码库，不修改文件）
+    ↓
 User Confirmation —用户确认
     ↓
 Task Decomposition —任务分解（atomic + verification）
@@ -116,6 +118,37 @@ For each path, specify:
 - Trade-offs
 
 **Present all paths to the user. Make a clear recommendation.** Wait for explicit approval before proceeding.
+
+### Plan Mode (READ-ONLY Planning)
+
+At any point during SPEC workflow, you can activate **Plan Mode** — a read-only state where you explore the codebase and design implementation plans without modifying files.
+
+**When to use Plan Mode:**
+- Complex refactoring requiring dependency analysis
+- User says "plan only", "don't modify anything", "just analyze"
+- Need to explore codebase before committing to architecture
+
+**Plan Mode Rules:**
+```
+READ-ONLY — NO file modifications allowed
+- No creating, editing, or deleting files
+- No git operations (add/commit/push)
+- No package installations
+- Only read operations (ls, read, grep, find, git log/diff)
+```
+
+**Plan Mode Output:**
+```markdown
+## Implementation Plan
+### Critical Files for Implementation
+- path/to/file1.ts — [why critical]
+- path/to/file2.ts — [why critical]
+
+⚠️ Plan Mode Active — No files modified.
+Reply "proceed" to exit Plan Mode and implement.
+```
+
+See [spec-workflow.md](references/spec-workflow.md) for complete Plan Mode guidelines.
 
 ### Phase 3.5: Task Decomposition (MANDATORY)
 

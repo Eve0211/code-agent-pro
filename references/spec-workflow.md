@@ -2,7 +2,7 @@
 
 ## Overview
 
-The SPEC workflow is the backbone of this skill. Inspired by the Claude Code `/feature-dev` plugin, it enforces a discipline: **凝固需求 → 设计确认 → 任务分解 → 实施 → 评审**.
+The SPEC workflow is the backbone of this skill. Inspired by the Claude Code `/feature-dev` plugin, it enforces a discipline: **凝固需求 → 设计确认 → 任务分解 → 实施 → 评审**。
 
 ```
 Phase 1: Clarify     Phase 2: SPEC Doc    Phase 3: Architecture    Phase 3.5: Tasks
@@ -12,6 +12,96 @@ Ask questions   →   Invoke write-a-prd  →   Design 3 paths         →  Deco
                                                                                      ↓
 Phase 4: Build   →   Phase 5: Quality Gates   →   Phase 6: Self-Reflection
 ```
+
+## Plan Mode
+
+Plan Mode is a **READ-ONLY** planning state that can be activated at any point during the SPEC workflow. In Plan Mode, you can explore the codebase and design implementation plans, but you **CANNOT modify any files**.
+
+### When to Activate Plan Mode
+
+- After Phase 2 (PRD) when you need to explore the codebase before architecture design
+- After Phase 3 (Architecture) when you need deeper codebase exploration
+- When the task involves complex refactoring and you need to understand dependencies first
+- When user explicitly asks to "plan only" or "don't modify anything yet"
+
+### Plan Mode Rules (CRITICAL)
+
+```
+=== READ-ONLY MODE - NO FILE MODIFICATIONS ===
+
+You are STRICTLY PROHIBITED from:
+- Creating new files (no Write, touch, or file creation of any kind)
+- Modifying existing files (no Edit operations)
+- Deleting files (no rm or deletion)
+- Moving or copying files (no mv or cp)
+- Creating temporary files anywhere, including /tmp
+- Using redirect operators (>, >>, |) or heredocs to write to files
+- Running ANY commands that change system state (no git add/commit/push, npm install, etc.)
+
+Your role is EXCLUSIVELY to explore and plan. You do NOT have access to file editing tools.
+```
+
+### Plan Mode Process
+
+```
+1. Explore Codebase
+   - Find existing patterns and conventions
+   - Understand current architecture
+   - Identify similar features as reference
+   - Trace through relevant code paths
+
+2. Design Solution
+   - Create implementation approach
+   - Consider trade-offs and architectural decisions
+   - Follow existing patterns where appropriate
+
+3. Output Plan
+   - Step-by-step implementation strategy
+   - Critical files list (3-5 files most important)
+   - Dependencies and sequencing
+   - Potential challenges
+```
+
+### Plan Mode Output Template
+
+```markdown
+## Implementation Plan
+
+### Overview
+[Brief summary of the implementation approach]
+
+### Architecture Approach
+[High-level design decisions]
+
+### Step-by-Step Plan
+1. [Step 1 with file references]
+2. [Step 2 with file references]
+3. ...
+
+### Critical Files for Implementation
+- path/to/file1.ts — [why critical]
+- path/to/file2.ts — [why critical]
+- path/to/file3.ts — [why critical]
+
+### Dependencies & Risks
+- **Dependencies**: [what needs to happen first]
+- **Risks**: [potential challenges]
+- **Alternatives considered**: [other approaches and why not chosen]
+
+---
+
+⚠️ **Plan Mode Active** — No files have been modified. 
+Reply "proceed" or "exit plan mode" to continue with implementation.
+```
+
+### Exiting Plan Mode
+
+After presenting the plan:
+1. State clearly: "Plan Mode is active. No files have been modified."
+2. Ask for explicit confirmation: "Should I proceed with implementation?"
+3. Only after user confirms, exit Plan Mode and continue to Phase 4
+
+**If user wants modifications to the plan**: Stay in Plan Mode, update the plan, ask for confirmation again.
 
 ## Phase 1 — Requirement Clarification
 
