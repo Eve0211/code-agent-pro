@@ -12,16 +12,17 @@ Inspired by the [Claude Code `/feature-dev` plugin](https://github.com/anthropic
 
 ## Features
 
-### 🏗️ SPEC Workflow (6 Phases)
+### 🏗️ SPEC Workflow (7 Phases)
 
 | Phase | What Happens |
 |-------|-------------|
-| Phase 1 | **Requirement Clarification** — Eliminate ambiguity before writing |
-| Phase 2 | **PRD Generation** — Formal spec via `write-a-prd` skill integration |
-| Phase 3 | **Architecture Design** — 3 paths: minimal / clean / pragmatic |
-| Phase 4 | **Implementation** — Only after user confirmation |
+| Phase 1 | **Requirement Clarification** — Divergent thinking + UI/UX discovery |
+| Phase 2 | **PRD Generation** — Formal spec with mandatory UI/UX Design Direction |
+| Phase 3 | **Architecture Design** — 3 paths + UI/UX implementation trace |
+| Phase 3.5 | **Task Decomposition** — Atomic tasks with verification methods |
+| Phase 4 | **Implementation** — Execute task by task with verification |
 | Phase 5 | **Quality Gates** — Lint → Type check → Tests → Build → Security |
-| Phase 6 | **Self-Reflection** — "Is this the best approach?" |
+| Phase 6 | **Self-Reflection** — Visual review + code review |
 
 ### 🗺️ `/learn` Command — Project Onboarding
 
@@ -106,29 +107,7 @@ code-agent-pro/
 
 ## Installation
 
-### Option A: npx (Recommended)
-
-```bash
-# Install to all detected agents automatically
-npx code-agent-pro
-
-# Install to a specific agent only
-npx code-agent-pro --claude
-npx code-agent-pro --codex
-npx code-agent-pro --openclaw
-npx code-agent-pro --cursor
-npx code-agent-pro --opencode
-
-# Reinstall (overwrite existing)
-npx code-agent-pro --force
-
-# List detected agents and install status
-npx code-agent-pro --list
-```
-
-Supported agents: **Claude Code**, **Codex**, **OpenClaw / QClaw**, **Cursor**, **OpenCode**.
-
-### Option B: Git Clone
+### Git Clone
 
 ```bash
 git clone https://github.com/Eve0211/code-agent-pro.git
@@ -199,16 +178,17 @@ MIT
 
 ## 功能特性
 
-### 🏗️ SPEC 工作流（6 阶段）
+### 🏗️ SPEC 工作流（7 阶段）
 
 | 阶段 | 内容 |
 |------|------|
-| 阶段 1 | **需求澄清** — 动手前消除所有歧义 |
-| 阶段 2 | **PRD 生成** — 通过 `write-a-prd` 技能生成正式规格文档 |
-| 阶段 3 | **架构设计** — 三条路径：最小改动 / 干净架构 / 实用平衡 |
-| 阶段 4 | **实施构建** — 用户确认后才动手写代码 |
+| 阶段 1 | **需求澄清** — 发散思维提问 + UI/UX 发现 |
+| 阶段 2 | **PRD 生成** — 强制包含 UI/UX 设计方向 |
+| 阶段 3 | **架构设计** — 三条路径 + UI/UX 实现追溯 |
+| 阶段 3.5 | **任务分解** — 原子任务 + 验证方法 |
+| 阶段 4 | **实施构建** — 逐任务执行并验证 |
 | 阶段 5 | **质量门禁** — Lint → 类型检查 → 测试 → 构建 → 安全扫描 |
-| 阶段 6 | **自我反思** — "这是最优方案吗？" |
+| 阶段 6 | **自我反思** — 视觉审查 + 代码审查 |
 
 ### 🗺️ `/learn` 命令 — 项目快速理解
 
@@ -293,29 +273,7 @@ code-agent-pro/
 
 ## 安装
 
-### 方式一：npx（推荐）
-
-```bash
-# 自动安装到所有检测到的 Agent
-npx code-agent-pro
-
-# 仅安装到指定 Agent
-npx code-agent-pro --claude
-npx code-agent-pro --codex
-npx code-agent-pro --openclaw
-npx code-agent-pro --cursor
-npx code-agent-pro --opencode
-
-# 强制覆盖已有安装
-npx code-agent-pro --force
-
-# 查看支持的 Agent 及安装状态
-npx code-agent-pro --list
-```
-
-支持：**Claude Code**、**Codex**、**OpenClaw / QClaw**、**Cursor**、**OpenCode**。
-
-### 方式二：Git Clone
+### Git Clone
 
 ```bash
 git clone https://github.com/Eve0211/code-agent-pro.git
