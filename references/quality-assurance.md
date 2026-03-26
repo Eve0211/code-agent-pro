@@ -119,14 +119,15 @@ When generating tests, always include:
 ## Pre-Submission Checklist
 - [ ] Function does exactly one thing
 - [ ] No hidden state mutations
-- [ ] Errors are caught and handled meaningfully
+- [ ] Errors caught and handled meaningfully
 - [ ] Names are self-documenting
 - [ ] Comments explain WHY, not WHAT
 - [ ] No obvious duplication
 - [ ] Cyclomatic complexity ≤ 10
 - [ ] No hardcoded values that should be config
-- [ ] All imports are used
 - [ ] Tests cover the happy path AND edge cases
+- [ ] Version compatibility verified (framework API matches detected version)
+- [ ] README updated if public API or project structure changed
 ```
 
 ### Complexity Threshold

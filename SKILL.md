@@ -115,8 +115,9 @@ Only after user confirmation:
 1. Read all files identified in the architecture phase
 2. Implement following the chosen approach
 3. Strictly follow codebase conventions (indentation, naming, imports)
-4. Update progress as files are modified
-5. **Write tests alongside the code**, not after
+4. **Verify version compatibility** — detect framework/library versions from manifest files (pom.xml, package.json, pyproject.toml, go.mod, Cargo.toml). When uncertain about API changes between versions, **search official documentation** or use verified training data. **Never fabricate API signatures, annotations, or method names.** See [Version Compatibility](#version-compatibility) for language-specific risks.
+5. Update progress as files are modified
+6. **Write tests alongside the code**, not after
 
 ### Phase 5: Quality Gates
 
@@ -242,6 +243,84 @@ For tasks that touch multiple files:
 - Track all modified files
 - Group changes by logical unit (don't mix refactoring with feature changes)
 - Present changes in a clean summary before committing
+- **Before pushing, check if README needs updating** — if the push adds a new feature, changes public API, modifies setup instructions, or alters project structure, update README first.
+
+## Version Compatibility
+
+**Rule: Never fabricate API signatures, annotations, or method names.** When generating code, always verify compatibility with the project's actual framework/library versions.
+
+### How to Verify
+
+1. **Read the manifest file first** — detect exact versions
+2. **If confident** (API is stable across versions) — proceed normally
+3. **If uncertain** (known breaking changes between versions) — search official docs before writing
+4. **If unsure whether uncertain** — search official docs anyway (safe default)
+
+### Breaking Change Hotspots by Language
+
+#### Java / Spring
+
+| Area | Risk | Example |
+|------|------|---------|
+| `javax.*` → `jakarta.*` | Spring Boot 3.x requires Jakarta EE 9+ | `javax.servlet` → `jakarta.servlet` |
+| Spring Security | `WebSecurityConfigurerAdapter` removed in 6.x | Must use component-based config |
+| JPA annotations | Hibernate 6.x changes | `@GenericGenerator` → `@UuidGenerator` |
+| Spring Cloud | Version locked to Spring Boot version | See compatibility matrix |
+| Java version | Language features vary by JDK | Records (17+), Sealed classes (17+), Pattern matching (21+) |
+
+#### Python
+
+| Area | Risk | Example |
+|------|------|---------|
+| FastAPI | 0.x → 1.x: breaking changes | Import paths, dependency injection API |
+| Django | 3.x → 4.x → 5.x | `URLPattern`, middleware changes, `USE_TZ` defaults |
+| SQLAlchemy | 1.x → 2.x | `Query` removed, 2.0 style queries required |
+| Python version | Feature availability varies | Walrus operator (3.8+), match/case (3.10+), type params (3.12+) |
+| Pydantic | v1 → v2 | `BaseModel` changes, validator syntax |
+| pytest | Version-specific fixtures | `tmp_path` (modern) vs `tmpdir` (legacy) |
+
+#### Node.js / TypeScript
+
+| Area | Risk | Example |
+|------|------|---------|
+| Next.js | 13 → 14 → 15 | App Router changes, Server Components, `metadata` export |
+| React | 16 → 17 → 18 → 19 | Strict mode, Suspense, `use` hook, Server Components |
+| Express | 4 → 5 | Breaking middleware changes, async handler handling |
+| NestJS | Major versions | Decorator changes, module system updates |
+| TypeScript | 4.x → 5.x | Decorator changes, `const` type parameters |
+| Prisma | Version-specific APIs | `prisma.$extends()` (4.x+) |
+
+#### Go
+
+| Area | Risk | Example |
+|------|------|---------|
+| Go version | Language features vary | Generics (1.18+), range-over-int (1.22+), loop variable scope (1.22+) |
+| Popular libraries | Breaking changes between majors | `chi` v5, `gorm` v2, `gin` v1.x |
+| Module system | `GOPROXY`, `GOSUMDB` | Verify go.sum for dependency pins |
+
+#### Rust
+
+| Area | Risk | Example |
+|------|------|---------|
+| Edition | 2021 → 2024 | Lifetime capture changes, unsafe extern |
+| tokio | Runtime version | `tokio::spawn` signatures, feature flags |
+| axum | 0.6 → 0.7 | Router API, extractor changes |
+| serde | Version-specific derives | `#[serde(skip_serializing_if)]` behavior |
+| Clippy | Lint changes between versions | New lints in nightly, version-gated |
+
+### What NOT to Do
+
+```
+❌ "I think the annotation is @XyzAnnotation" (fabricated)
+❌ "In Spring Boot 3, use @DeprecatedAnnotation" (wrong)
+❌ "This should work in Python 3.8" (unverified assumption)
+❌ "Next.js 14 supports this pattern" (might be 15-only)
+
+✅ Search official docs: "Spring Boot 3 @Service annotation migration"
+✅ Read the changelog / migration guide for the specific version
+✅ Check the actual project dependencies to know the exact version
+✅ If still uncertain after searching, tell the user and ask
+```
 
 ---
 
