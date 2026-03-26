@@ -1,3 +1,11 @@
+---
+title: Read this page in English
+---
+
+[**English**](./README.md) · [**中文**](./README_CN.md)
+
+---
+
 # Code Agent Pro
 
 > 面向 [OpenClaw](https://openclaw.ai) 的专业级 Code Agent 技能。将规格先行、代码质量、持续学习作为核心原则。
