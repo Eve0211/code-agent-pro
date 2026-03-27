@@ -7,6 +7,62 @@ description: Professional Code Agent with SPEC workflow, memory, quality assuran
 
 An opinionated, production-grade Code Agent that treats code quality, specification discipline, and continuous learning as first-class concerns. Inspired by the Claude Code `/feature-dev` plugin philosophy: **never code without a spec**.
 
+---
+
+## ⛔ CRITICAL RULES — READ BEFORE EVERY PHASE
+
+**These rules are NON-NEGOTIABLE. Violation = task failure.**
+
+### Rule 1: BLOCKING GATES
+- EVERY phase ends with a BLOCKING GATE
+- You MUST STOP and WAIT for user confirmation
+- NEVER proceed to next phase without user saying "confirm" / "yes" / "proceed"
+
+### Rule 2: WRITE FILES TO PROJECT ROOT
+- PRD → `{PROJECT_ROOT}/SPEC_PRD.md`
+- Plan → `{PROJECT_ROOT}/SPEC.md`
+- `{PROJECT_ROOT}` = directory with manifest (package.json, pyproject.toml, etc.)
+- NEVER write to workspace root or memory directory
+
+### Rule 3: OUTPUT DOCUMENT CONTENT
+- After writing PRD/Plan, OUTPUT THE FULL CONTENT to chat
+- User must see the document WITHOUT searching for files
+
+### Rule 4: DETECT PROJECT TYPE
+- React project → MUST use React (NEVER plain HTML)
+- Vue project → MUST use Vue
+- Next.js project → MUST use Next.js
+- Check package.json dependencies FIRST
+
+### Rule 5: UI/UX IS MANDATORY
+- Phase 1 MUST ask visual style + layout
+- Phase 2 MUST show ASCII layout diagram
+- NEVER skip UI questions for UI tasks
+
+### Rule 6: PLAN OPTIONS BEFORE WRITING
+- Phase 3 Step 2: Present 2-3 Plan options FIRST
+- User selects → THEN write SPEC.md
+- NEVER write Plan without user selection
+
+---
+
+## SELF-CHECK Protocol
+
+**At the START of each phase, output this self-check:**
+
+```
+📋 SELF-CHECK: Entering Phase [X]
+
+✅ Rule 1: I will STOP at BLOCKING GATE and wait for user
+✅ Rule 2: I will write files to PROJECT ROOT (not workspace)
+✅ Rule 3: I will OUTPUT document content after writing
+✅ Rule 4: I have detected project type: [React/Vue/Next.js/etc.]
+✅ Rule 5: I will ask UI/UX questions (if UI task)
+✅ Rule 6: I will present options BEFORE writing Plan
+```
+
+---
+
 ## Core Philosophy
 
 ```
@@ -78,6 +134,13 @@ See [Project Onboarding](references/project-onboarding.md) for the complete guid
 When the user describes a feature, bug fix, or any non-trivial task, the SPEC workflow activates automatically. The SPEC layer is powered by the `write-a-prd` skill.
 
 ### Phase 1: Requirement Clarification
+
+```
+📋 SELF-CHECK: Entering Phase 1
+✅ I will detect project type from manifest
+✅ I will ask UI style + layout (if UI task)
+✅ I will STOP at BLOCKING GATE
+```
 
 **This phase has TWO mandatory parts:**
 
@@ -161,6 +224,14 @@ If the request is already clear and small (single-file change, obvious bug fix),
 
 ### Phase 2: Generate SPEC Document (PRD)
 
+```
+📋 SELF-CHECK: Entering Phase 2
+✅ I will write PRD to {PROJECT_ROOT}/SPEC_PRD.md
+✅ I will show ASCII layout diagram
+✅ I will OUTPUT full PRD content to chat after writing
+✅ I will STOP at BLOCKING GATE and wait for "confirm"
+```
+
 Invoke the `write-a-prd` skill to produce a formal specification:
 
 ```
@@ -183,6 +254,15 @@ Where `{PROJECT_ROOT}` = the directory containing the project's manifest file (p
 **The PRD becomes the source of truth.** All subsequent code must trace back to specific PRD sections.
 
 ### Phase 3: Architecture Design (with Plan Options)
+
+```
+📋 SELF-CHECK: Entering Phase 3
+✅ I will present 3 architecture paths → wait for selection
+✅ I will present 2-3 Plan options → wait for selection
+✅ I will write Plan to {PROJECT_ROOT}/SPEC.md
+✅ I will OUTPUT full Plan content to chat after writing
+✅ I will STOP at BLOCKING GATE and wait for "yes, proceed"
+```
 
 This phase has **THREE steps**:
 
