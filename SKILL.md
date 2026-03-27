@@ -232,17 +232,75 @@ Which plan do you prefer?
 ```
 WRITE to: {PROJECT_ROOT}/SPEC.md
 ```
-**CRITICAL: Write to project root, NOT workspace root.**
+**CRITICAL: Write to project root, NOT workspace root or memory directory.**
 
-**Plan Mode Rules (READ-ONLY):**
+3. **After writing, output the FULL PRD content** to chat (so user can review immediately)
+4. **⛔ BLOCKING GATE — WAIT for user to confirm PRD:**
 ```
-- No creating, editing, or deleting files
-- No git operations (add/commit/push)
-- No package installations
-- Only read operations (ls, read, grep, find, git log/diff)
+PRD has been written to {PROJECT_ROOT}/SPEC_PRD.md (see content above).
+
+⛔ BLOCKING: Reply "confirm" to proceed to architecture design.
+Or describe what to change in the PRD.
+```
+**You MUST STOP here. Do NOT proceed to Phase 3 until user replies.**
+
+### Phase 3: Architecture Design (with Plan Options)
+
+This phase has **THREE steps**:
+
+#### Step 1: Present 3 Architecture Paths
+
+After PRD is confirmed, present 3 implementation approaches in parallel:
+
+1. **Minimal Path**: Smallest change, maximum reuse.
+2. **Clean Architecture Path**: Proper abstraction, testability, long-term maintainability.
+3. **Pragmatic Path**: Balanced changes with reasonable boundaries.
+
+For each path, specify files to create/modify, patterns, complexity, and trade-offs.
+**Make a clear recommendation.**
+
+**⛔ BLOCKING GATE — WAIT for user to select a path:**
+```
+Which architecture path do you prefer? (A/B/C or describe your own)
+```
+**You MUST STOP here. Do NOT proceed to Step 2 until user selects.**
+
+#### Step 2: Present Plan Options + Write Plan (READ-ONLY)
+
+After user selects an architecture path:
+
+1. **READ-ONLY exploration**: Analyze codebase to understand existing patterns
+2. **Present 2-3 Plan Options** for user to choose:
+
+```
+Based on your selected architecture, here are implementation plans:
+
+**Plan A: [Name]**
+- Approach: [brief description]
+- Key Files: [files involved]
+- Pros: [advantages]
+- Cons: [disadvantages]
+
+**Plan B: [Name]**
+- Approach: [brief description]
+- Key Files: [files involved]
+- Pros: [advantages]
+- Cons: [disadvantages]
+
+**Plan C: [Name]** (if applicable)
+- Approach: [brief description]
+- Key Files: [files involved]
+- Pros: [advantages]
+- Cons: [disadvantages]
+
+Which plan do you prefer?
 ```
 
-**Implementation Plan Template:**
+**⛔ BLOCKING GATE — WAIT for user to select a plan.**
+**You MUST STOP here. Do NOT write SPEC.md until user selects.**
+
+3. **After user selects a plan, WRITE the Implementation Plan using this template:**
+
 ```markdown
 # Implementation Plan
 
@@ -275,17 +333,21 @@ WRITE to: {PROJECT_ROOT}/SPEC.md
 ## Verification
 - [How to verify each step is correct]
 ```
-
-#### Step 3: User Confirms Plan
-
-**DO NOT proceed to Phase 3.5 until user confirms the plan.**
-
 ```
-Implementation Plan has been written to SPEC.md in the project root.
+WRITE to: {PROJECT_ROOT}/SPEC.md
+```
 
-Reply "yes, proceed" to start task decomposition.
+**CRITICAL: Write to project root, NOT workspace root.**
+
+4. **After writing, output the FULL Plan content** to chat (so user can review immediately)
+5. **⛔ BLOCKING GATE — WAIT for user to confirm:**
+```
+Implementation Plan has been written to {PROJECT_ROOT}/SPEC.md (see content above).
+
+⛔ BLOCKING: Reply "yes, proceed" to start task decomposition.
 Or describe what to change in the plan.
 ```
+**You MUST STOP here. Do NOT proceed to Phase 3.5 until user replies.**
 
 ### Phase 3.5: Task Decomposition (MANDATORY)
 
