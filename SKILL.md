@@ -16,9 +16,13 @@ Phase 1: Clarify —澄清需求（Context Analysis + Questions）
     ↓
 Phase 2: PRD —生成产品需求文档（含UI/UX强制选择）
     ↓
-Phase 3: Implementation Plan —基于PRD的只读执行方案（Plan Mode）
+Phase 3: Architecture Design —架构设计（3 paths）
     ↓
-User Confirms Plan —用户确认执行方案
+    → 用户选择架构路径
+    ↓
+Phase 3: Plan Mode —基于选择的架构生成执行计划（只读）
+    ↓
+User Confirms Plan —用户确认执行计划
     ↓
 Phase 3.5: Task Decomposition —任务分解（atomic + verification）
     ↓
@@ -35,7 +39,7 @@ Phase 6: Self-Reflection —验证与学习闭环
 |-------|---------|
 | **Memory** | Project context, session state, code patterns, knowledge graph, context efficiency |
 | **Cognition** | Intent recognition, multi-level requirement parsing, task decomposition, dependency reasoning |
-| **SPEC** | Requirement clarification, PRD generation, **implementation plan (Plan Mode)**, user confirmation |
+| **SPEC** | Requirement clarification, PRD generation, **architecture design (3 paths + Plan Mode)**, user confirmation |
 | **Generation** | Architecture consistency, design pattern matching, complexity control |
 | **Execution** | Environment management, build verification, incremental changes, sandbox & rollback |
 | **Quality** | Static analysis, test generation, self-inspection, security audit |
@@ -153,24 +157,40 @@ it MUST be recorded in this section. See [spec-workflow.md](references/spec-work
 
 The PRD becomes the **source of truth** for this task. All subsequent code must trace back to specific PRD sections, including UI/UX requirements.
 
-### Phase 3: Implementation Plan (Plan Mode - MANDATORY)
+### Phase 3: Architecture Design (with Plan Mode)
 
-⚠️ **This is NOT optional. Every non-trivial task MUST go through this phase.**
+This phase has **two steps**:
 
-After PRD is generated, you MUST create a concrete implementation plan:
+#### Step 1: Present 3 Architecture Paths
+
+After the PRD is generated, design the implementation approach. Think in parallel:
+
+1. **Minimal Path**: Smallest change, maximum reuse. What files touch?
+2. **Clean Architecture Path**: Proper abstraction, testability, long-term maintainability.
+3. **Pragmatic Path**: Balanced — pragmatic changes with reasonable boundaries.
+
+For each path, specify:
+- Which files to create/modify
+- Which patterns to apply
+- Estimated complexity
+- Trade-offs
+
+**Present all paths to the user. Make a clear recommendation.** Wait for user to select a path.
+
+#### Step 2: Plan Mode - Create Implementation Plan (READ-ONLY)
+
+After user selects an architecture path, create a concrete implementation plan:
 
 ```
-1. READ-ONLY exploration: Analyze the codebase to understand:
+1. READ-ONLY exploration: Analyze codebase to understand:
    - Existing patterns and conventions
    - File structure and module organization
    - Dependencies and imports
-   
-2. Create Implementation Plan based on PRD:
-   - Which files to create/modify
-   - What patterns to apply (consistent with existing code)
-   - Step-by-step approach
-   
-3. Present to user for confirmation
+
+2. Create Implementation Plan based on:
+   - The PRD requirements
+   - The selected architecture path
+   - Existing codebase patterns
 ```
 
 **Plan Mode Rules:**
@@ -182,7 +202,33 @@ READ-ONLY — NO file modifications allowed
 - Only read operations (ls, read, grep, find, git log/diff)
 ```
 
-**⚠️ DO NOT PROCEED to Phase 3.5 until user confirms the implementation plan.**
+**Implementation Plan Document (REQUIRED):**
+```markdown
+## Implementation Plan
+
+### Overview
+[Brief summary based on PRD + selected architecture]
+
+### Files to Create/Modify
+| File | Action | Reason |
+|------|--------|--------|
+| path/to/file1.ts | create | [why needed for this feature] |
+| path/to/file2.ts | modify | [what to add/change] |
+
+### Step-by-Step Plan
+1. [Step 1 - what to do, which file]
+2. [Step 2 - what to do, which file]
+...
+
+### Dependencies
+- [What needs to happen first]
+- [Potential challenges]
+
+### UI/UX Traceability
+- [How this plan implements the UI/UX from PRD]
+```
+
+**⚠️ Present the plan to user. DO NOT proceed to Phase 3.5 until user confirms the plan.**
 
 ### Phase 3.5: Task Decomposition (MANDATORY)
 
