@@ -2,31 +2,103 @@
 
 ## Overview
 
-The SPEC workflow is the backbone of this skill. Inspired by the Claude Code `/feature-dev` plugin, it enforces a discipline: **凝固需求 → 设计确认 → 任务分解 → 实施 → 评审**。
+The SPEC workflow is the backbone of this skill. It enforces a discipline: **澄清 → PRD → 执行方案 → 确认 → 任务分解 → 实施 → 评审**。
 
 ```
-Phase 1: Clarify     Phase 2: SPEC Doc    Phase 3: Architecture    Phase 3.5: Tasks
-  ↓                    ↓                      ↓                         ↓
-Ask questions   →   Invoke write-a-prd  →   Design 3 paths         →  Decompose into
-                                                           (wait for confirmation)    atomic tasks
-                                                                                     ↓
+Phase 1: Clarify    Phase 2: PRD            Phase 3: Implementation Plan    User Confirms
+  ↓                   ↓                          ↓                              ↓
+Ask questions   →   Generate PRD          →   Plan Mode (READ-ONLY)    →   Confirm plan
+                                                                              ↓
 Phase 4: Build   →   Phase 5: Quality Gates   →   Phase 6: Self-Reflection
 ```
 
-## Plan Mode
+## Phase Flow Summary
 
-Plan Mode is a **READ-ONLY** planning state that can be activated at any point during the SPEC workflow. In Plan Mode, you can explore the codebase and design implementation plans, but you **CANNOT modify any files**.
+| Phase | Name | Description |
+|-------|------|-------------|
+| Phase 1 | Clarify | Context analysis + Questions (Contextual + Standard) |
+| Phase 2 | PRD | Generate Product Requirement Document (with UI/UX mandatory) |
+| Phase 3 | **Implementation Plan** | READ-ONLY exploration → Concrete execution plan based on PRD |
+| Phase 3.5 | Tasks | Decompose into atomic verifiable tasks |
+| Phase 4 | Build | Execute tasks with verification |
+| Phase 5 | Quality | Lint → Type → Tests → Security |
+| Phase 6 | Reflect | Self-review and learn |
 
-### When to Activate Plan Mode
+---
 
-- After Phase 2 (PRD) when you need to explore the codebase before architecture design
-- After Phase 3 (Architecture) when you need deeper codebase exploration
-- When the task involves complex refactoring and you need to understand dependencies first
-- When user explicitly asks to "plan only" or "don't modify anything yet"
+## Phase 3: Implementation Plan (Plan Mode - MANDATORY)
 
-### Plan Mode Rules (CRITICAL)
+⚠️ **This is NOT optional. Every non-trivial task MUST go through this phase after PRD.**
+
+### What This Phase Does
+
+After PRD is generated, you must:
+1. **Explore the codebase** (READ-ONLY)
+2. **Create a concrete implementation plan** based on PRD
+3. **Present to user for confirmation**
+
+### Step 1: READ-ONLY Codebase Exploration
+
+Analyze the codebase to understand:
+- Existing patterns and conventions
+- File structure and module organization
+- Dependencies and imports
+- Similar features as reference
+
+**Allowed operations:**
+- Read files (read, ls, find, grep)
+- Git operations (log, diff, blame) - read only
+- Search for patterns
+
+**NOT allowed:**
+- No file creation/editing/deletion
+- No git add/commit/push
+- No package installations
+- No executing build/test commands that modify state
+
+### Step 2: Create Implementation Plan
+
+Based on the PRD and codebase analysis, create:
+
+```markdown
+## Implementation Plan
+
+### Overview
+[Brief summary of the approach based on PRD]
+
+### Architecture
+[Which files to create/modify, what patterns to apply]
+
+### Step-by-Step
+1. [Step 1 with file references]
+2. [Step 2 with file references]
+...
+
+### Critical Files
+- path/to/file1.ts — [why critical]
+- path/to/file2.ts — [why critical]
+
+### Dependencies & Risks
+- **Dependencies**: [what needs to happen first]
+- **Risks**: [potential challenges]
+```
+
+### Step 3: Present to User
+
+⚠️ **DO NOT PROCEED to Phase 3.5 until user confirms the plan.**
 
 ```
+## Implementation Plan
+
+[Detailed plan based on PRD]
+
+⚠️ Please confirm this plan before I decompose into tasks.
+Reply "confirm" to proceed, or describe what to change.
+```
+
+---
+
+## Plan Mode (Simplified)
 === READ-ONLY MODE - NO FILE MODIFICATIONS ===
 
 You are STRICTLY PROHIBITED from:
@@ -360,7 +432,7 @@ Stop and ask clarifying questions when:
 
 If the request is already specific and self-contained (e.g., "fix the null pointer at line 42 of auth.py"), just fix it. Don't force a conversation when not needed.
 
-## Phase 2 — Generate SPEC Document
+## Phase 2 — Generate SPEC Document (PRD)
 
 ### How to Use write-a-prd
 
@@ -377,6 +449,8 @@ Key requirements:
   - [P2: nice to have]
 Success criteria: [how to measure success]
 ```
+
+⚠️ **After PRD is generated, proceed to Phase 3 (Implementation Plan). DO NOT skip Phase 3.**
 
 ### PRD Output to Code Traceability
 

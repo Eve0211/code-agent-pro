@@ -12,23 +12,21 @@ An opinionated, production-grade Code Agent that treats code quality, specificat
 ```
 User Request
     ↓
-SPEC First —凝固需求
+Phase 1: Clarify —澄清需求（Context Analysis + Questions）
     ↓
-Memory Check —加载上下文
+Phase 2: PRD —生成产品需求文档（含UI/UX强制选择）
     ↓
-Architecture Design —架构设计（3 paths）
+Phase 3: Implementation Plan —基于PRD的只读执行方案（Plan Mode）
     ↓
-[Plan Mode] —可选：只读规划（探索代码库，不修改文件）
+User Confirms Plan —用户确认执行方案
     ↓
-User Confirmation —用户确认
+Phase 3.5: Task Decomposition —任务分解（atomic + verification）
     ↓
-Task Decomposition —任务分解（atomic + verification）
+Phase 4: Execute —逐任务执行与验证
     ↓
-Execute & Verify —逐任务执行与验证
+Phase 5: Quality Gates —质量门禁
     ↓
-Quality Gates —质量门禁
-    ↓
-Self-Reflection —验证与学习闭环
+Phase 6: Self-Reflection —验证与学习闭环
 ```
 
 ## Architecture Overview
@@ -37,7 +35,7 @@ Self-Reflection —验证与学习闭环
 |-------|---------|
 | **Memory** | Project context, session state, code patterns, knowledge graph, context efficiency |
 | **Cognition** | Intent recognition, multi-level requirement parsing, task decomposition, dependency reasoning |
-| **SPEC** | PRD generation, requirement clarification, architecture design, user confirmation |
+| **SPEC** | Requirement clarification, PRD generation, **implementation plan (Plan Mode)**, user confirmation |
 | **Generation** | Architecture consistency, design pattern matching, complexity control |
 | **Execution** | Environment management, build verification, incremental changes, sandbox & rollback |
 | **Quality** | Static analysis, test generation, self-inspection, security audit |
@@ -155,30 +153,25 @@ it MUST be recorded in this section. See [spec-workflow.md](references/spec-work
 
 The PRD becomes the **source of truth** for this task. All subsequent code must trace back to specific PRD sections, including UI/UX requirements.
 
-### Phase 3: Architecture Design
+### Phase 3: Implementation Plan (Plan Mode - MANDATORY)
 
-After the PRD is generated, design the implementation approach. Think in parallel:
+⚠️ **This is NOT optional. Every non-trivial task MUST go through this phase.**
 
-1. **Minimal Path**: Smallest change, maximum reuse. What files touch?
-2. **Clean Architecture Path**: Proper abstraction, testability, long-term maintainability.
-3. **Pragmatic Path**: Balanced — pragmatic changes with reasonable boundaries.
+After PRD is generated, you MUST create a concrete implementation plan:
 
-For each path, specify:
-- Which files to create/modify
-- Which patterns to apply
-- Estimated complexity
-- Trade-offs
-
-**Present all paths to the user. Make a clear recommendation.** Wait for explicit approval before proceeding.
-
-### Plan Mode (READ-ONLY Planning)
-
-At any point during SPEC workflow, you can activate **Plan Mode** — a read-only state where you explore the codebase and design implementation plans without modifying files.
-
-**When to use Plan Mode:**
-- Complex refactoring requiring dependency analysis
-- User says "plan only", "don't modify anything", "just analyze"
-- Need to explore codebase before committing to architecture
+```
+1. READ-ONLY exploration: Analyze the codebase to understand:
+   - Existing patterns and conventions
+   - File structure and module organization
+   - Dependencies and imports
+   
+2. Create Implementation Plan based on PRD:
+   - Which files to create/modify
+   - What patterns to apply (consistent with existing code)
+   - Step-by-step approach
+   
+3. Present to user for confirmation
+```
 
 **Plan Mode Rules:**
 ```
@@ -189,18 +182,7 @@ READ-ONLY — NO file modifications allowed
 - Only read operations (ls, read, grep, find, git log/diff)
 ```
 
-**Plan Mode Output:**
-```markdown
-## Implementation Plan
-### Critical Files for Implementation
-- path/to/file1.ts — [why critical]
-- path/to/file2.ts — [why critical]
-
-⚠️ Plan Mode Active — No files modified.
-Reply "proceed" to exit Plan Mode and implement.
-```
-
-See [spec-workflow.md](references/spec-workflow.md) for complete Plan Mode guidelines.
+**⚠️ DO NOT PROCEED to Phase 3.5 until user confirms the implementation plan.**
 
 ### Phase 3.5: Task Decomposition (MANDATORY)
 
