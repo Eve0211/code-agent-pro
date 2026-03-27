@@ -88,15 +88,34 @@ Before asking ANY questions, analyze the project to ask contextual questions:
 1. **Read project manifest** (package.json, pyproject.toml, go.mod, pom.xml)
    - What framework and version is used?
    - What are the main dependencies?
+
+2. **Detect project type (CRITICAL — prevents wrong framework):**
+   ```
+   IF package.json exists AND "react" in dependencies/deps:
+      → This is a React project. ALL frontend work MUST use React.
+      → NEVER generate plain HTML/CSS/JS.
    
-2. **Check existing patterns** (read 3-5 relevant source files)
+   IF package.json exists AND "vue" in dependencies/deps:
+      → This is a Vue project. ALL frontend work MUST use Vue.
+   
+   IF package.json exists AND "next" in dependencies/deps:
+      → This is a Next.js project. ALL frontend work MUST use Next.js.
+   
+   IF pyproject.toml exists AND "fastapi" in dependencies:
+      → This is a FastAPI project.
+   
+   IF pom.xml exists AND "spring-boot" in dependencies:
+      → This is a Spring Boot project.
+   ```
+
+3. **Check existing patterns** (read 3-5 relevant source files)
    - What's the code style?
    - What's the error handling pattern?
    - What's the testing pattern?
 
-3. **Then ask contextual questions** based on what you learned:
-   - "I see you're using FastAPI + SQLAlchemy. For this feature, should I follow the existing repository pattern?"
-   - "Your project uses Pydantic v2, so I'll use the new validator syntax."
+4. **Then ask contextual questions** based on what you learned:
+   - "I see you're using React 19. I'll use React for this feature."
+   - "Your project uses FastAPI + SQLAlchemy. I'll follow the existing repository pattern."
 
 **Generic questions (always ask):**
 - **Scope**: What is explicitly in/out of scope?
@@ -140,7 +159,7 @@ Before I generate the PRD, let's confirm the visual direction:
 
 If the request is already clear and small (single-file change, obvious bug fix), skip to generation — don't force a spec for trivial tasks.
 
-### Phase 2: Generate SPEC Document
+### Phase 2: Generate SPEC Document (PRD)
 
 Invoke the `write-a-prd` skill to produce a formal specification:
 
@@ -148,87 +167,125 @@ Invoke the `write-a-prd` skill to produce a formal specification:
 Use the write-a-prd skill to generate a PRD for this task.
 Populate all sections: problem statement, goals/non-goals, user stories,
 functional requirements with priority levels (P0/P1/P2),
-UI/UX Design Direction, and acceptance criteria.
+UI/UX Design Direction (with the confirmed visual style and layout), and acceptance criteria.
 ```
 
-**⚠️ UI/UX Design Direction is MANDATORY** for any task with a user interface.
-If user mentions visual style (e.g., "玻璃拟态", "glassmorphism", "扁平化"), 
-it MUST be recorded in this section. See [spec-workflow.md](references/spec-workflow.md) for the required template.
+**After generating PRD, you MUST:**
 
-The PRD becomes the **source of truth** for this task. All subsequent code must trace back to specific PRD sections, including UI/UX requirements.
+1. **Show ASCII Layout Diagram** based on confirmed layout (sidebar/main/header/etc.)
+2. **WRITE PRD to file in project root directory:**
+```
+WRITE to: {PROJECT_ROOT}/SPEC_PRD.md
+```
+Where `{PROJECT_ROOT}` = the directory containing the project's manifest file (package.json, pyproject.toml, go.mod, pom.xml, etc.)
+**CRITICAL: Write to project root, NOT workspace root or memory directory.**
 
-### Phase 3: Architecture Design (with Plan Mode)
+**The PRD becomes the source of truth.** All subsequent code must trace back to specific PRD sections.
 
-This phase has **two steps**:
+### Phase 3: Architecture Design (with Plan Options)
+
+This phase has **THREE steps**:
 
 #### Step 1: Present 3 Architecture Paths
 
-After the PRD is generated, design the implementation approach. Think in parallel:
+After the PRD, present 3 implementation approaches in parallel:
 
-1. **Minimal Path**: Smallest change, maximum reuse. What files touch?
+1. **Minimal Path**: Smallest change, maximum reuse.
 2. **Clean Architecture Path**: Proper abstraction, testability, long-term maintainability.
-3. **Pragmatic Path**: Balanced — pragmatic changes with reasonable boundaries.
+3. **Pragmatic Path**: Balanced changes with reasonable boundaries.
 
-For each path, specify:
-- Which files to create/modify
-- Which patterns to apply
-- Estimated complexity
-- Trade-offs
+For each path, specify files to create/modify, patterns, complexity, and trade-offs.
+**Make a clear recommendation. Wait for user to select a path.**
 
-**Present all paths to the user. Make a clear recommendation.** Wait for user to select a path.
+#### Step 2: Present Plan Options + Write Plan (READ-ONLY)
 
-#### Step 2: Plan Mode - Create Implementation Plan (READ-ONLY)
+After user selects an architecture path:
 
-After user selects an architecture path, create a concrete implementation plan:
+1. **READ-ONLY exploration**: Analyze codebase to understand existing patterns
+2. **Present 2-3 Plan Options** for user to choose:
 
 ```
-1. READ-ONLY exploration: Analyze codebase to understand:
-   - Existing patterns and conventions
-   - File structure and module organization
-   - Dependencies and imports
+Based on your selected architecture, here are implementation plans:
 
-2. Create Implementation Plan based on:
-   - The PRD requirements
-   - The selected architecture path
-   - Existing codebase patterns
+**Plan A: [Name]**
+- Approach: [brief description]
+- Key Files: [files involved]
+- Pros: [advantages]
+- Cons: [disadvantages]
+
+**Plan B: [Name]**
+- Approach: [brief description]
+- Key Files: [files involved]
+- Pros: [advantages]
+- Cons: [disadvantages]
+
+**Plan C: [Name]** (if applicable)
+- Approach: [brief description]
+- Key Files: [files involved]
+- Pros: [advantages]
+- Cons: [disadvantages]
+
+Which plan do you prefer?
 ```
 
-**Plan Mode Rules:**
+3. **After user selects a plan, WRITE the Implementation Plan to file:**
 ```
-READ-ONLY — NO file modifications allowed
+WRITE to: {PROJECT_ROOT}/SPEC.md
+```
+**CRITICAL: Write to project root, NOT workspace root.**
+
+**Plan Mode Rules (READ-ONLY):**
+```
 - No creating, editing, or deleting files
 - No git operations (add/commit/push)
 - No package installations
 - Only read operations (ls, read, grep, find, git log/diff)
 ```
 
-**Implementation Plan Document (REQUIRED):**
+**Implementation Plan Template:**
 ```markdown
-## Implementation Plan
+# Implementation Plan
 
-### Overview
-[Brief summary based on PRD + selected architecture]
+## Based On
+- PRD: SPEC_PRD.md
+- Architecture Path: [selected path]
+- Plan Option: [selected plan]
 
-### Files to Create/Modify
+## Overview
+[Brief summary based on PRD + selected architecture + plan]
+
+## Files to Create/Modify
 | File | Action | Reason |
 |------|--------|--------|
-| path/to/file1.ts | create | [why needed for this feature] |
-| path/to/file2.ts | modify | [what to add/change] |
+| path/to/file1.ts | create | [why needed] |
+| path/to/file2.ts | modify | [what to change] |
 
-### Step-by-Step Plan
+## Step-by-Step Plan
 1. [Step 1 - what to do, which file]
+   - Why: [traces to which PRD requirement]
 2. [Step 2 - what to do, which file]
+   - Why: [traces to which PRD requirement]
 ...
 
-### Dependencies
-- [What needs to happen first]
-- [Potential challenges]
+## UI/UX Implementation
+- Visual Style: [from PRD]
+- Layout Structure: [from PRD, with ASCII diagram]
+- Components: [which files implement which UI elements]
 
-### UI/UX Traceability
-- [How this plan implements the UI/UX from PRD]
+## Verification
+- [How to verify each step is correct]
 ```
 
-**⚠️ Present the plan to user. DO NOT proceed to Phase 3.5 until user confirms the plan.**
+#### Step 3: User Confirms Plan
+
+**DO NOT proceed to Phase 3.5 until user confirms the plan.**
+
+```
+Implementation Plan has been written to SPEC.md in the project root.
+
+Reply "yes, proceed" to start task decomposition.
+Or describe what to change in the plan.
+```
 
 ### Phase 3.5: Task Decomposition (MANDATORY)
 
