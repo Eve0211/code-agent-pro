@@ -105,6 +105,191 @@ After presenting the plan:
 
 ## Phase 1 — Requirement Clarification
 
+### ⚠️ CRITICAL: This Phase Has TWO Mandatory Parts
+
+---
+
+### Part A: Context Analysis (FIRST - Before Questions)
+
+**You MUST do this before asking any questions:**
+
+1. **Read project manifest** (package.json, pyproject.toml, go.mod, pom.xml, Cargo.toml)
+   - What framework and version is used?
+   - What are the main dependencies?
+
+2. **Check existing patterns** (read 3-5 relevant source files)
+   - What's the code style? (imports, naming, formatting)
+   - What's the error handling pattern?
+   - What's the testing pattern?
+   - What directory structure is used?
+
+3. **THEN ask contextual questions** based on what you learned
+
+---
+
+### Part B: Standard Clarifying Questions (ALWAYS)
+
+Ask these basics first:
+
+**Scope:**
+- What is explicitly in scope? What is NOT in scope?
+- Should this replace existing implementation or add to it?
+- Minimum viable scope for first iteration?
+
+**Success:**
+- How will you know it's done correctly?
+- What does "done" look like?
+- Any specific acceptance tests?
+
+**Constraints:**
+- Any deadline or time pressure?
+- Tech stack restrictions?
+- Team conventions to follow?
+
+---
+
+### Part C: Contextual Questions (Based on Project Analysis)
+
+**After analyzing the project, ask specific questions like:**
+
+#### For Web Frontend Projects
+- "I see you're using React 19. Should I use Server Components or Client Components for this?"
+- "Your project uses Tailwind. Should I follow the existing utility patterns?"
+- "Is this page for authenticated users or public?"
+
+#### For Backend/API Projects
+- "Your project uses FastAPI. Should I follow the existing dependency injection pattern?"
+- "I see you use SQLAlchemy. Should I follow the repository pattern?"
+- "Should this be a new endpoint or extend an existing one?"
+
+#### For Python Projects
+- "Your project uses Pydantic v2. Should I use the new validator syntax?"
+- "Should I use async (FastAPI) or sync (Flask) for this?"
+
+#### For Java/Spring Projects
+- "Should this be a @Service or @Component?"
+- "Your project uses Spring Boot 3. Should I use jakarta.* namespaces?"
+
+#### For Mobile Projects
+- "Should this be in a new screen or added to an existing one?"
+- "Does this need offline support?"
+
+#### For Data/ML Projects
+- "What's the expected data volume?"
+- "Should this run synchronously or as a background job?"
+
+---
+
+### Part D: Divergent Thinking (Go Beyond Obvious)
+
+Ask to uncover hidden requirements:
+
+| Category | Questions |
+|----------|-----------|
+| **Edge Cases** | What happens when input is empty / network fails / user is unauthorized? |
+| **Error Handling** | What should happen when something goes wrong? |
+| **Scale** | How many users/data items? Expected response time? |
+| **Security** | What data is sensitive? Any compliance (GDPR, HIPAA)? |
+| **Future** | Will this need extension? Planned features that should influence design? |
+
+---
+
+### Part E: UI/UX Discovery (MANDATORY for UI Tasks)
+
+⚠️ **THIS IS NOT OPTIONAL. You MUST do this for ANY task with a user interface.**
+
+#### Step 1: Ask Visual Style (MUST)
+
+Send this EXACTLY:
+
+```
+🎨 Visual Style Selection
+
+Before I generate the PRD, please confirm the visual style:
+
+**Option A: Glassmorphism (玻璃拟态)**
+Translucent panels, frosted glass effect, blurred backgrounds
+Best for: Modern dashboards, premium UIs
+
+**Option B: Flat (扁平化)**
+Clean, minimal, solid colors, no gradients
+Best for: Content-heavy sites, apps
+
+**Option C: Neumorphism (新拟态)**
+Soft shadows, subtle 3D, raised/pressed effects
+Best for: Widgets, interactive elements
+
+**Option D: Minimal (极简)**
+Maximum whitespace, essential elements only
+Best for: Landing pages, portfolios
+
+**Option E: Brutalist**
+Raw, bold, high contrast, stark typography
+Best for: Creative sites, strong statements
+
+**[Your style]: _______________**
+(Describe if you have a specific vision)
+
+Reply with A, B, C, D, E or describe your style.
+```
+
+#### Step 2: Ask Layout (MANDATORY)
+
+After style is confirmed, send:
+
+```
+📐 Layout Structure
+
+**Option A: Sidebar + Main**
+┌──────────┬──────────────────────┐
+│          │                      │
+│ Sidebar  │     Main Content     │
+│          │                      │
+└──────────┴──────────────────────┘
+Best for: Dashboards, admin panels, apps
+
+**Option B: Header + Content + Footer**
+┌────────────────────────────────────┐
+│              Header                │
+├────────────────────────────────────┤
+│                                    │
+│           Main Content             │
+│                                    │
+├────────────────────────────────────┤
+│              Footer                │
+└────────────────────────────────────┘
+Best for: Marketing pages, documentation
+
+**Option C: Two-Column**
+┌─────────────┬──────────────────────┐
+│  Panel 1    │      Panel 2         │
+└─────────────┴──────────────────────┘
+Best for: Settings, comparisons
+
+**Option D: Full-Screen**
+┌────────────────────────────────────┐
+│                                     │
+│         Full Content               │
+│                                     │
+└────────────────────────────────────┘
+Best for: Single-purpose tools
+
+**[Your layout]: _______________**
+
+Reply with A, B, C, D or describe your layout.
+```
+
+#### Step 3: Confirm Before Proceeding
+
+⚠️ **DO NOT PROCEED to Phase 2 until user confirms BOTH:**
+- [ ] Visual Style selected
+- [ ] Layout Structure selected
+
+If user doesn't respond to either, remind them:
+> "I need both visual style and layout to proceed with the PRD. Which option works for you?"
+
+---
+
 ### When to Stop and Ask
 
 Stop and ask clarifying questions when:
@@ -170,91 +355,6 @@ Stop and ask clarifying questions when:
 - What external services does this depend on?
 - What happens if those services are down?
 - Are there version constraints?
-
-### UI/UX Discovery (For UI Tasks)
-
-When the task involves a user interface, proactively offer design guidance:
-
-#### Step 1: Understand Context
-- What platform? (Desktop / Web / Mobile / CLI)
-- What's the primary use case? (Data entry / Dashboard / Tool / Game)
-- Who are the users? (Internal team / Customers / Public)
-
-#### Step 2: Offer Visual Style Options
-
-Based on the project context, suggest 3-4 appropriate styles:
-
-```markdown
-## Suggested Visual Styles for [Project Type]
-
-Based on your project, here are some recommended styles:
-
-**Option A: [Style Name]**
-- Description: [brief description]
-- Best for: [use case]
-- Preview: [ASCII representation]
-
-**Option B: [Style Name]**
-- Description: [brief description]
-- Best for: [use case]
-- Preview: [ASCII representation]
-
-**Option C: [Style Name]**
-- Description: [brief description]
-- Best for: [use case]
-- Preview: [ASCII representation]
-
-Which style fits your vision? Or describe your own.
-```
-
-#### Step 3: Offer ASCII Layout Templates
-
-Provide 2-3 layout options for the user to choose:
-
-```markdown
-## Layout Templates
-
-**Template A: [Layout Name]**
-```
-┌─────────────────────────────────────┐
-│  [Header/Toolbar]                   │
-├──────────┬──────────────────────────┤
-│          │                          │
-│ [Side]   │     [Main Content]       │
-│ [Panel]  │                          │
-│          │                          │
-└──────────┴──────────────────────────┘
-```
-Best for: [use case]
-
-**Template B: [Layout Name]**
-```
-┌─────────────────────────────────────┐
-│  [Header]                           │
-├─────────────────────────────────────┤
-│                                     │
-│        [Main Content]               │
-│                                     │
-├─────────────────────────────────────┤
-│  [Footer/Actions]                   │
-└─────────────────────────────────────┘
-```
-Best for: [use case]
-
-**Template C: [Layout Name]**
-```
-┌─────────────────────────────────────┐
-│  [Header]                           │
-├────────────┬────────────────────────┤
-│            │                        │
-│ [Panel 1]  │      [Panel 2]         │
-│            │                        │
-└────────────┴────────────────────────┘
-```
-Best for: [use case]
-
-Which layout fits your needs?
-```
 
 ### When NOT to Ask
 

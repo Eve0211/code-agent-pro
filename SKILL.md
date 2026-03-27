@@ -77,12 +77,64 @@ When the user describes a feature, bug fix, or any non-trivial task, the SPEC wo
 
 ### Phase 1: Requirement Clarification
 
-Ask focused questions to eliminate ambiguity before writing any spec:
+**This phase has TWO mandatory parts:**
 
+#### Part A: Context Analysis (FIRST)
+
+Before asking ANY questions, analyze the project to ask contextual questions:
+
+1. **Read project manifest** (package.json, pyproject.toml, go.mod, pom.xml)
+   - What framework and version is used?
+   - What are the main dependencies?
+   
+2. **Check existing patterns** (read 3-5 relevant source files)
+   - What's the code style?
+   - What's the error handling pattern?
+   - What's the testing pattern?
+
+3. **Then ask contextual questions** based on what you learned:
+   - "I see you're using FastAPI + SQLAlchemy. For this feature, should I follow the existing repository pattern?"
+   - "Your project uses Pydantic v2, so I'll use the new validator syntax."
+
+**Generic questions (always ask):**
 - **Scope**: What is explicitly in/out of scope?
-- **Users**: Who benefits? What's their primary workflow?
-- **Constraints**: Deadline, tech stack restrictions, team conventions?
 - **Success**: How do you know it's done correctly?
+
+**Contextual questions (based on project analysis):**
+- Framework-specific: "Your project uses React 19. Should I follow the Server Components pattern?"
+- Pattern-specific: "I see you use custom hooks for API calls. Should I follow that pattern?"
+- Architecture-specific: "Your project has a service layer. Should I place this in services/ or create a new module?"
+
+#### Part B: UI/UX Discovery (MANDATORY for UI tasks)
+
+⚠️ **FOR ANY TASK WITH A USER INTERFACE, YOU MUST DO THIS BEFORE PHASE 2:**
+
+1. **Ask about Visual Style:**
+```
+Before I generate the PRD, let's confirm the visual direction:
+
+**What visual style fits your project?**
+- Glassmorphism (玻璃拟态) — translucent, frosted glass effect
+- Flat (扁平化) — clean, minimal, solid colors  
+- Neumorphism (新拟态) — soft shadows, 3D feel
+- Minimal (极简) — maximum whitespace, essential elements only
+- Brutalist — raw, bold, high contrast
+- [Your preference]: _____________
+
+**Choose one or describe your own style.**
+```
+
+2. **Ask about Layout:**
+```
+**What layout structure?**
+- Sidebar + Main Content (dashboard, admin panels)
+- Header + Content + Footer (marketing, landing pages)
+- Two-column / Three-column (content-heavy sites)
+- Full-screen (single-purpose tools)
+- [Your preference]: _____________
+```
+
+**⚠️ DO NOT PROCEED to Phase 2 until user confirms BOTH visual style AND layout.**
 
 If the request is already clear and small (single-file change, obvious bug fix), skip to generation — don't force a spec for trivial tasks.
 
