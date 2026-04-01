@@ -89,6 +89,7 @@ Standard tooling (`ruff`, `go vet`, `clippy`, `mypy`) already enforces language 
 
 | Phase | Skill | Type | Purpose |
 |-------|-------|------|---------|
+| Phase 1-2 | `prompt-optimizer` | Embedded | Optimize prompts before critical generation |
 | Phase 2 | `write-a-prd` | External (soft) | Formal PRD generation |
 | Phase 3 | `superdesign` | External (soft) | Frontend: ASCII wireframe + theme |
 | Phase 3 | `backend-patterns.md` | Embedded | Backend: architecture design |
@@ -120,6 +121,7 @@ Every external skill has an embedded fallback. Code Agent Pro **never blocks** o
 
 | Missing Skill | Impact | Fallback |
 |--------------|--------|----------|
+| `prompt-optimizer` | Prompts less refined | Direct generation with embedded templates |
 | `write-a-prd` | PRD less formal | Embedded template in spec-workflow.md |
 | `superdesign` | Design less structured | frontend-design-fallback.md (auto-generated) |
 | `frontend-design` | Less aesthetic guidance | Built-in anti-AI-slop principles |
@@ -129,6 +131,27 @@ Every external skill has an embedded fallback. Code Agent Pro **never blocks** o
 | `github` | Manual git | Standard git commands |
 | `coding-agent` | No subagent delegation | Direct implementation |
 | `log-analyzer` | Manual log review | Built-in error handling checklist |
+
+### Prompt Optimizer Degradation
+
+**When prompt-optimizer is NOT used** (Quick Fix workflow or user skips):
+
+```
+Direct generation with:
+• Embedded templates in workflow/phases/
+• Default quality thresholds
+• No iterative refinement
+```
+
+**When prompt-optimizer IS used**:
+
+```
+4-Stage Pipeline:
+1. Analyst → Diagnose weaknesses (5 dimensions)
+2. Optimizer → Rewrite prompt
+3. Reviewer → Score (≥8.0 to pass)
+4. Refiner → Iterate (max 3 rounds)
+```
 
 ### Degradation Pattern
 
@@ -273,6 +296,9 @@ bash scripts/setup.sh
 Manual install:
 
 ```bash
+# Prompt Optimization (built-in, no install needed)
+# Located at: skills/prompt-optimizer/SKILL.md
+
 # SPEC
 skillhub install write-a-prd
 

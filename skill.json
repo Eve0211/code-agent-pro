@@ -1,6 +1,6 @@
 {
   "name": "code-agent-pro",
-  "version": "1.0.0",
+  "version": "4.0.0",
   "description": "Professional Code Agent skill with SPEC workflow, project onboarding, quality assurance, and version compatibility. Works with Claude Code, Codex, OpenClaw, Cursor, OpenCode, Trae.",
   "author": "Eve & OpenClaw",
   "created": "2026-03-26"
