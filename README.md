@@ -10,19 +10,52 @@
 
 Inspired by the [Claude Code `/feature-dev` plugin](https://github.com/anthropics/claude-code/tree/main/plugins/feature-dev) philosophy: **never code without a spec**.
 
+## ⚡ Quick Routing
+
+```
+// Step 0: Skill Check FIRST (1% rule)
+Does any internal skill apply?
+ → YES → Invoke skill first, then route
+ → NO ↓
+
+// Step 1: Route to workflow
+Is this a bug with a clear cause, small scope (≤5 lines), no side effects?
+ → YES → Quick Fix (execute directly, 0 overhead)
+ → NO ↓
+
+Is this a bug that's blocked — unknown root cause, or fixes that break other things?
+ → YES → Debug (Observe → Hypothesize → Verify)
+ → NO ↓
+
+Is this feature development, complex refactoring, or a task with unclear requirements?
+ → YES → Spec-Driven (Clarify → Announce → Execute → Accept)
+```
+
+## Three Iron Rules
+
+1. **Don't move without clarity** — wrong direction + high effort = disaster
+2. **Announce before you act** — show what you're about to do, wait for confirmation
+3. **No root cause, no code** — don't patch symptoms on a half-fixed bug
+
 ## Features
 
-### 🏗️ SPEC Workflow (7 Phases)
+### 🏗️ Three Workflows
 
-| Phase | What Happens |
-|-------|-------------|
-| Phase 1 | **Requirement Clarification** — Divergent thinking + UI/UX discovery |
-| Phase 2 | **PRD Generation** — Formal spec with mandatory UI/UX Design Direction |
-| Phase 3 | **Architecture Design** — 3 paths + UI/UX implementation trace |
-| Phase 3.5 | **Task Decomposition** — Atomic tasks with verification methods |
-| Phase 4 | **Implementation** — Execute task by task with verification |
-| Phase 5 | **Quality Gates** — Lint → Type check → Tests → Build → Security |
-| Phase 6 | **Self-Reflection** — Visual review + code review |
+| Workflow | Trigger | Definition |
+|----------|---------|------------|
+| **Quick Fix** | Bug with clear cause, ≤5 lines, no side effects | Direct execution, 0 overhead |
+| **Debug** | Blocked bugs, unknown root cause | Observe → Hypothesize → Verify |
+| **Spec-Driven** | Features, complex refactors, unclear requirements | Clarify → Announce → Execute → Accept |
+
+### Internal Skills Routing
+
+| Task Type | Skill | When |
+|-----------|-------|------|
+| New feature / unclear requirements | `brainstorming` | Before writing spec |
+| Complex logic / architecture | `writing-plans` | During spec phase |
+| UI/UX component | `frontend-design` | When frontend involved |
+| Unknown codebase | `learn-project` | First time seeing project |
+| Before claiming done | `verification-before-completion` | Before delivery |
 
 ### 🗺️ `/learn` Command — Project Onboarding
 
@@ -35,13 +68,11 @@ Run `/learn [path]` to quickly understand any project in ~30 minutes:
 | Core Flow Deep Dive | 10 min | Main workflows traced end-to-end |
 | Pattern Extraction | 5 min | Code style, testing, logging conventions |
 | Mental Model | 5 min | `memory/project-map.md` cheat sheet |
-| Gap Report | 2 min | Targeted questions for unclear areas |
 
 ### 🧠 Memory System
 
 - 4-layer architecture: session → working → long-term → codebase
 - Context window optimization with prioritization and compression
-- Knowledge graph construction for codebase relationships
 
 ### 🔧 Backend Support (Python / Java / Go / Rust / Node.js)
 
@@ -49,60 +80,56 @@ Run `/learn [path]` to quickly understand any project in ~30 minutes:
 - **Error handling** hierarchies with typed errors
 - **Testing strategy** (unit / integration / E2E)
 - **Structured logging** setup per language
-- **Agent self-check** checklist
-
-### 🌐 Cross-Language Patterns
-
-- API design (REST / GraphQL)
-- Concurrency patterns (Fan-Out, Worker Pool, Circuit Breaker, Pipeline)
-- Caching strategy with decision tree
-- Database schema design and query optimization
-- Observability (logs, metrics, traces)
 
 ### 🎨 Frontend Integration
 
 | Phase | Skill | Purpose |
 |-------|-------|---------|
-| Design | `superdesign` | ASCII wireframes, theme templates, animation planning |
-| Implementation | `frontend-design` | Aesthetic differentiation, anti-AI-slop |
-| Audit | `ui-ux-pro-max` | 99 UX guidelines, accessibility, performance |
-| React | `vercel-react-best-practices` | 65 rules across 8 priority categories |
+| Design | `frontend-design` | Aesthetic differentiation |
+| Audit | `ui-ux-pro-max` | 99 UX guidelines, accessibility |
 
-### 🔒 Quality Assurance
+### 🔒 Quality Gates (Mandatory After Every Workflow)
 
-- Static analysis tool matrix (Ruff / ESLint / go vet / Clippy)
-- Automatic test generation alongside code
-- Security audit (secrets, injection, path traversal, license compliance)
-- Complexity control (cyclomatic complexity ≤ 10)
+| Gate | Command | Requirement |
+|------|---------|-------------|
+| Lint | `eslint .` / `ruff check .` / `go vet ./...` | 0 errors |
+| Type Check | `tsc --noEmit` / `mypy` | 0 errors |
+| Tests | `npm test` / `pytest` | 100% pass |
+| Security | Scan for secrets / injection patterns | 0 vulnerabilities |
 
-### 📚 Learning Loop
-
-- Failure mode library with root cause analysis
-- User preference learning across sessions
-- Performance accumulation and estimation
-- A/B decision framework for architecture choices
-
-## Architecture
+## Project Structure
 
 ```
 code-agent-pro/
 ├── SKILL.md                              # Main entry point
 ├── skill.json                            # Metadata
-├── scripts/
-│   ├── setup.sh                          # Dependency check (macOS / Linux)
-│   └── setup.ps1                         # Dependency check (Windows)
-└── references/
-    ├── spec-workflow.md                  # SPEC 6-phase guide + PRD integration
-    ├── project-onboarding.md             # /learn command guide
-    ├── backend-patterns.md               # Per-language architecture & code templates
-    ├── cross-lang-patterns.md            # API, concurrency, caching, DB, observability
-    ├── memory-system.md                  # Context management & window optimization
-    ├── quality-assurance.md              # Static analysis, testing, self-inspection
-    ├── execution-environment.md          # Build verification, sandbox, rollback
-    ├── security-audit.md                 # Threat patterns, compliance, license review
-    ├── learning-loop.md                  # Failure modes, preferences, A/B decisions
-    ├── skill-integrations.md             # Integration router & degradation strategy
-    └── frontend-design-fallback.md       # Fallback when superdesign not installed
+├── README.md                             # English docs
+├── README_CN.md                          # Chinese docs
+├── package.json                          # Skill manifest
+├── workflow/
+│   └── definitions/
+│       ├── quick-fix.md                  # Quick Fix workflow
+│       ├── spec-driven.md                # Spec-Driven workflow
+│       └── debug.md                      # Debug workflow
+├── skills/
+│   ├── brainstorming/                    # Requirement clarification
+│   ├── writing-plans/                    # Task decomposition
+│   ├── frontend-design/                  # UI/UX implementation
+│   ├── learn-project/                    # Project onboarding
+│   └── verification-before-completion/   # Quality gates
+├── references/
+│   ├── tdd-lightweight.md                # Lightweight TDD
+│   ├── preflight-check.md                # UI task checklist
+│   ├── version-compatibility.md          # Framework risks
+│   ├── backend-patterns.md               # Backend architecture
+│   ├── quality-assurance.md              # Static analysis
+│   ├── security-audit.md                 # Security patterns
+│   └── learning-loop.md                  # Failure modes
+├── analyzers/                            # Code analysis scripts
+├── memory/                               # Memory templates
+└── scripts/
+    ├── setup.sh                          # Dependency check (macOS / Linux)
+    └── setup.ps1                         # Dependency check (Windows)
 ```
 
 ## Installation
@@ -125,42 +152,28 @@ cp -r code-agent-pro ~/.config/opencode/skills/
 Works fully standalone. Install these for enhanced capabilities:
 
 ```bash
-skillhub install write-a-prd         # SPEC generation
-skillhub install superdesign         # Frontend design
-skillhub install ui-ux-pro-max       # UX quality audit
-skillhub install github              # Git workflow
-skillhub install webapp-testing      # E2E testing
+skillhub install frontend-design        # UI/UX implementation
+skillhub install ui-ux-pro-max          # UX quality audit
+skillhub install github                 # Git workflow
 ```
 
 ## Usage
 
 ### Quick Start
 
-Just describe what you want to build. The SPEC workflow activates automatically for non-trivial tasks.
-
-### Project Onboarding
-
-```
-/learn ./my-project    → Scans project in 30 min, generates mental model
-```
+Just describe what you want to build. The workflow activates automatically based on task type.
 
 ### Skip SPEC for Small Tasks
 
 Single-line bug fixes, trivial refactors, and emergency hotfixes skip the full workflow. Quality gates always run.
 
-## Design Philosophy
+## Anti-Patterns
 
-### Three-Layer Model
-
-| Layer | Content | Source |
-|-------|---------|--------|
-| Layer 1 | Universal patterns (architecture, errors, testing, security) | Embedded in skill |
-| Layer 2 | Framework specialists (React/Next.js performance rules) | External skills |
-| Layer 3 | Project-specific conventions (CLAUDE.md, ruff.toml) | Project files |
-
-### Graceful Degradation
-
-Every external skill has an embedded fallback. Missing skills never block the workflow.
+- Don't start coding without routing to a workflow
+- Don't skip quality gates
+- Don't claim "done" without verification
+- Don't fabricate API signatures
+- Don't code without a spec
 
 ## License
 
@@ -176,19 +189,48 @@ MIT
 
 灵感来源于 [Claude Code `/feature-dev` 插件](https://github.com/anthropics/claude-code/tree/main/plugins/feature-dev) 的设计哲学：**永远不要在没有规格的情况下写代码**。
 
+## ⚡ 快速路由
+
+```
+// Step 0: 技能检查优先 (1% 规则)
+// Step 1: 路由到对应工作流
+Bug + 清晰根因 + ≤5 行 + 无副作用?
+ → YES → Quick Fix (直接执行，零开销)
+ → NO ↓
+
+Bug + 阻塞 + 根因未知?
+ → YES → Debug (观察 → 假设 → 验证)
+ → NO ↓
+
+新功能 / 复杂重构 / 需求不清晰?
+ → YES → Spec-Driven (澄清 → 宣布 → 执行 → 验收)
+```
+
+## 三条铁律
+
+1. **没有清晰方向不要动** — 错误方向 + 高投入 = 灾难
+2. **行动前先宣布** — 展示你要做什么，等待确认
+3. **没有根因不写代码** — 不要在只修一半的 bug 上打补丁
+
 ## 功能特性
 
-### 🏗️ SPEC 工作流（7 阶段）
+### 🏗️ 三种工作流
 
-| 阶段 | 内容 |
-|------|------|
-| 阶段 1 | **需求澄清** — 发散思维提问 + UI/UX 发现 |
-| 阶段 2 | **PRD 生成** — 强制包含 UI/UX 设计方向 |
-| 阶段 3 | **架构设计** — 三条路径 + UI/UX 实现追溯 |
-| 阶段 3.5 | **任务分解** — 原子任务 + 验证方法 |
-| 阶段 4 | **实施构建** — 逐任务执行并验证 |
-| 阶段 5 | **质量门禁** — Lint → 类型检查 → 测试 → 构建 → 安全扫描 |
-| 阶段 6 | **自我反思** — 视觉审查 + 代码审查 |
+| 工作流 | 触发条件 | 定义文件 |
+|--------|----------|----------|
+| **Quick Fix** | Bug 根因清晰，≤5 行，无副作用 | `workflow/definitions/quick-fix.md` |
+| **Debug** | 阻塞性 bug，根因未知 | `workflow/definitions/debug.md` |
+| **Spec-Driven** | 新功能、复杂重构、需求不清晰 | `workflow/definitions/spec-driven.md` |
+
+### 内部技能路由
+
+| 任务类型 | 技能 | 调用时机 |
+|----------|------|----------|
+| 新功能 / 需求不清晰 | `brainstorming` | 写规格前 |
+| 复杂逻辑 / 架构 | `writing-plans` | 规格阶段 |
+| UI/UX 组件 | `frontend-design` | 涉及前端 |
+| 陌生代码库 | `learn-project` | 首次接触项目 |
+| 交付前验证 | `verification-before-completion` | 交付前 |
 
 ### 🗺️ `/learn` 命令 — 项目快速理解
 
@@ -201,13 +243,11 @@ MIT
 | 核心流程深挖 | 10 分钟 | 主要业务流程端到端追踪 |
 | 模式提取 | 5 分钟 | 代码风格、测试、日志规范 |
 | 心智模型 | 5 分钟 | `memory/project-map.md` 速查表 |
-| 缺口报告 | 2 分钟 | 针对性提问不明确的区域 |
 
 ### 🧠 记忆系统
 
 - 4 层架构：会话 → 工作记忆 → 长期记忆 → 代码库记忆
 - 上下文窗口优化（优先级排序 + 压缩策略）
-- 知识图谱构建（项目实体关系网络）
 
 ### 🔧 后端支持（Python / Java / Go / Rust / Node.js）
 
@@ -215,38 +255,22 @@ MIT
 - **错误处理** 层级体系（类型化错误）
 - **测试策略**（单元 / 集成 / E2E）
 - **结构化日志** 每种语言的配置方式
-- **Agent 自检** 清单
-
-### 🌐 跨语言通用模式
-
-- API 设计（REST / GraphQL）
-- 并发模式（扇出、工作池、熔断器、管道）
-- 缓存策略决策树
-- 数据库 Schema 设计与查询优化
-- 可观测性（日志、指标、链路追踪）
 
 ### 🎨 前端集成
 
 | 阶段 | 技能 | 用途 |
 |------|------|------|
-| 设计 | `superdesign` | ASCII 线框图、主题模板、动画规划 |
-| 实施 | `frontend-design` | 美学差异化、反 AI 味 |
-| 审查 | `ui-ux-pro-max` | 99 条 UX 准则、无障碍、性能 |
-| React | `vercel-react-best-practices` | 65 条规则，8 个优先级分类 |
+| 设计 | `frontend-design` | 美学差异化 |
+| 审查 | `ui-ux-pro-max` | 99 条 UX 准则、无障碍 |
 
-### 🔒 质量保证
+### 🔒 质量门禁（每个工作流后强制执行）
 
-- 静态分析工具矩阵（Ruff / ESLint / go vet / Clippy）
-- 代码同步生成测试
-- 安全审计（密钥检测、注入防护、路径穿越、许可证合规）
-- 复杂度控制（圈复杂度 ≤ 10）
-
-### 📚 学习闭环
-
-- 失败模式库（根因分析）
-- 用户偏好跨会话学习
-- 性能积累与估算
-- A/B 决策框架
+| 门禁 | 命令 | 要求 |
+|------|------|------|
+| Lint | `eslint .` / `ruff check .` / `go vet ./...` | 0 错误 |
+| 类型检查 | `tsc --noEmit` / `mypy` | 0 错误 |
+| 测试 | `npm test` / `pytest` | 100% 通过 |
+| 安全 | 扫描密钥/注入/路径穿越 | 0 漏洞 |
 
 ## 项目结构
 
@@ -254,21 +278,33 @@ MIT
 code-agent-pro/
 ├── SKILL.md                              # 主入口
 ├── skill.json                            # 元数据
-├── scripts/
-│   ├── setup.sh                          # 依赖检测（macOS / Linux）
-│   └── setup.ps1                         # 依赖检测（Windows）
-└── references/
-    ├── spec-workflow.md                  # SPEC 6 阶段指南 + PRD 集成
-    ├── project-onboarding.md             # /learn 命令指南
-    ├── backend-patterns.md               # 各语言架构与代码模板
-    ├── cross-lang-patterns.md            # API、并发、缓存、数据库、可观测性
-    ├── memory-system.md                  # 上下文管理与窗口优化
-    ├── quality-assurance.md              # 静态分析、测试、自检
-    ├── execution-environment.md          # 构建验证、沙盒、回滚
-    ├── security-audit.md                 # 威胁模式、合规、许可证审查
-    ├── learning-loop.md                  # 失败模式、偏好、A/B 决策
-    ├── skill-integrations.md             # 集成路由表与降级策略
-    └── frontend-design-fallback.md       # superdesign 缺失时的回退
+├── README.md                             # 英文文档
+├── README_CN.md                          # 中文文档
+├── package.json                          # 技能清单
+├── workflow/
+│   └── definitions/
+│       ├── quick-fix.md                  # Quick Fix 工作流
+│       ├── spec-driven.md                # Spec-Driven 工作流
+│       └── debug.md                      # Debug 工作流
+├── skills/
+│   ├── brainstorming/                    # 需求澄清
+│   ├── writing-plans/                    # 任务分解
+│   ├── frontend-design/                  # UI/UX 实现
+│   ├── learn-project/                    # 项目入门
+│   └── verification-before-completion/   # 质量门禁
+├── references/
+│   ├── tdd-lightweight.md                # 轻量 TDD
+│   ├── preflight-check.md                # UI 任务清单
+│   ├── version-compatibility.md          # 框架版本风险
+│   ├── backend-patterns.md               # 后端架构
+│   ├── quality-assurance.md              # 静态分析
+│   ├── security-audit.md                 # 安全模式
+│   └── learning-loop.md                  # 失败模式
+├── analyzers/                            # 代码分析脚本
+├── memory/                               # 记忆模板
+└── scripts/
+    ├── setup.sh                          # 依赖检测（macOS / Linux）
+    └── setup.ps1                         # 依赖检测（Windows）
 ```
 
 ## 安装
@@ -291,42 +327,28 @@ cp -r code-agent-pro ~/.config/opencode/skills/
 本技能无需任何外部依赖即可完整运行。安装以下技能可获得增强能力：
 
 ```bash
-skillhub install write-a-prd         # 规格生成
-skillhub install superdesign         # 前端设计
-skillhub install ui-ux-pro-max       # UX 质量审查
-skillhub install github              # Git 工作流
-skillhub install webapp-testing      # E2E 测试
+skillhub install frontend-design        # UI/UX 实现
+skillhub install ui-ux-pro-max          # UX 质量审查
+skillhub install github                 # Git 工作流
 ```
 
 ## 使用方法
 
 ### 快速开始
 
-直接描述你想构建的内容。SPEC 工作流会自动激活。
-
-### 项目快速理解
-
-```
-/learn ./my-project    → 30 分钟内扫描项目，生成心智模型
-```
+直接描述你想构建的内容。工作流会根据任务类型自动激活。
 
 ### 小任务跳过 SPEC
 
 单行 Bug 修复、简单重构、紧急热修复会自动跳过完整工作流。质量门禁始终执行。
 
-## 设计哲学
+## 反模式
 
-### 三层能力模型
-
-| 层级 | 内容 | 来源 |
-|------|------|------|
-| 第一层 | 通用模式（架构、错误处理、测试、安全） | 技能内嵌 |
-| 第二层 | 框架专项（React/Next.js 性能规则） | 外部技能 |
-| 第三层 | 项目规范（CLAUDE.md、ruff.toml） | 项目文件 |
-
-### 优雅降级
-
-每个外部技能都有内嵌回退。缺失的技能不会阻断工作流。
+- 不要在没有路由到工作流的情况下开始写代码
+- 不要跳过质量门禁
+- 不要在没有验证的情况下声称完成
+- 不要伪造 API 签名
+- 不要在没有规格的情况下写代码
 
 ## 许可证
 
