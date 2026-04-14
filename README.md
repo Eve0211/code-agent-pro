@@ -59,15 +59,15 @@ Is this feature development, complex refactoring, or a task with unclear require
 
 ### 🗺️ `/learn` Command — Project Onboarding
 
-Run `/learn [path]` to quickly understand any project in ~30 minutes:
+Run `/learn [path]` to quickly understand any project:
 
-| Step | Duration | Output |
-|------|----------|--------|
-| Surface Scan | 3 min | Project type, tech stack, size |
-| Entry Point Trace | 5 min | Startup sequence, API surface |
-| Core Flow Deep Dive | 10 min | Main workflows traced end-to-end |
-| Pattern Extraction | 5 min | Code style, testing, logging conventions |
-| Mental Model | 5 min | `memory/project-map.md` cheat sheet |
+| Step | Output |
+|------|--------|
+| Surface Scan | Project type, tech stack, size |
+| Entry Point Trace | Startup sequence, API surface |
+| Core Flow Deep Dive | Main workflows traced end-to-end |
+| Pattern Extraction | Code style, testing, logging conventions |
+| Mental Model | `memory/project-map.md` cheat sheet |
 
 ### 🧠 Memory System
 
@@ -234,15 +234,15 @@ Bug + 阻塞 + 根因未知?
 
 ### 🗺️ `/learn` 命令 — 项目快速理解
 
-运行 `/learn [路径]` 在约 30 分钟内快速理解任何项目：
+运行 `/learn [路径]` 快速理解任何项目：
 
-| 步骤 | 耗时 | 产出 |
-|------|------|------|
-| 表面扫描 | 3 分钟 | 项目类型、技术栈、规模 |
-| 入口点追踪 | 5 分钟 | 启动流程、API 接口 |
-| 核心流程深挖 | 10 分钟 | 主要业务流程端到端追踪 |
-| 模式提取 | 5 分钟 | 代码风格、测试、日志规范 |
-| 心智模型 | 5 分钟 | `memory/project-map.md` 速查表 |
+| 步骤 | 产出 |
+|------|------|
+| 表面扫描 | 项目类型、技术栈、规模 |
+| 入口点追踪 | 启动流程、API 接口 |
+| 核心流程深挖 | 主要业务流程端到端追踪 |
+| 模式提取 | 代码风格、测试、日志规范 |
+| 心智模型 | `memory/project-map.md` 速查表 |
 
 ### 🧠 记忆系统
 
